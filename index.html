@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+   <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+ 
+<script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/cartodb.js"> </script>
+ <link href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.13/themes/css/cartodb.css" rel='stylesheet' /> 
+
+  <style>
+      body {
+        margin:0;
+        padding:0;
+      }
+      #mappy {
+        position:absolute;
+        top:0;
+        bottom:0;
+        width:100%;
+        height:100%;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div id='mappy'></div>
+    <script>
+
+
+ // will's public mapbox api token, keep this here for now
+ //   L.mapbox.accessToken = 'pk.eyJ1Ijoic2tvcmFzYXVydXMiLCJhIjoiaEdGTUZWTSJ9.osOC8tWU3bMaNprVNoEu7g';
+
+
+var map; 
+  // initiate leaflet map, but do not add a map 
+  map = new L.Map('mappy', {
+    center: [41.501860, -81.635799],
+    zoom: 18
+  })
+
+   // create cartodb visualization of the zoning polygons
+  cartodb.createLayer(map, 'http://skorasaurus.cartodb.com/api/v2/viz/71ad7876-da04-11e4-a16b-0e0c41326911/viz.json')
+    .addTo(map)
+    .on('done', function(layer) {
+      layer.setZIndex(8);
+    })
+    .on('error', function(err) {
+      alert("some error occurred: " + err);
+    });
+
+
+// add the semi-transparent basemap; with a higher zIndex so its tiles display above/over the cartodb polygons
+var basemap = new L.TileLayer('http://{s}.tiles.mapbox.com/v3/skorasaurus.99163c40/{z}/{x}/{y}.png', {maxZoom: 18, zIndex: 15});    
+
+basemap.addTo(map);
+
+
+
+
+
+
+
+//      var basemap = new L.TileLayer('', {maxZoom: 18});
+
+
+//  // hack to display the cartodb layer above my baselayer
+//     var overlays = cdb_layers;
+//     var lyrs = L.control.layers(overlays, {autoZIndex:true}).addTo(map);
+//     lyrs.bringToFront();
+
+// 
+
+    </script>
+  </body>
+
+</html>
